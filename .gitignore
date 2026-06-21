@@ -1,0 +1,19 @@
+# Binaries (root only)
+/sqlited.exe
+/sqlited
+*.exe
+
+# Runtime configuration and logs
+sqlited.json
+*.log
+server.out
+server.err
+
+# Test / runtime database files
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# Go
+vendor/
