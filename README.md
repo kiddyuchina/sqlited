@@ -6,7 +6,7 @@
 
 A lightweight, single-binary HTTP daemon that exposes **one or more local SQLite
 files** through a **Cloudflare D1-compatible** JSON API. Download, run
-`sqlited init`, then `sqlited run` �?no cloud, no dependencies, no build step.
+`sqlited init`, then `sqlited run` -- no cloud, no dependencies, no build step.
 
 ```bash
 # 1. Download the binary from GitHub Releases
@@ -18,17 +18,17 @@ sqlited run
 
 ## Features
 
-- **One binary, zero runtime dependencies** �?download and run; no package manager, no CGO, no external services.
-- **Serve multiple SQLite files at once** �?one `sqlited` process can open many databases, each reachable by its own `db_key` and route.
-- **CGO-free** �?built on the pure-Go driver [`modernc.org/sqlite`](https://pkg.go.dev/modernc.org/sqlite), so it cross-compiles anywhere.
-- **Atomic batches** �?an array of statements runs inside a single transaction and rolls back on any failure.
-- **Standard library routing** �?uses Go 1.22+ `net/http` path patterns, no web framework.
+- **One binary, zero runtime dependencies** -- download and run; no package manager, no CGO, no external services.
+- **Serve multiple SQLite files at once** -- one `sqlited` process can open many databases, each reachable by its own `db_key` and route.
+- **CGO-free** -- built on the pure-Go driver [`modernc.org/sqlite`](https://pkg.go.dev/modernc.org/sqlite), so it cross-compiles anywhere.
+- **Atomic batches** -- an array of statements runs inside a single transaction and rolls back on any failure.
+- **Standard library routing** -- uses Go 1.22+ `net/http` path patterns, no web framework.
 
 ## Quick Start
 
 ### 1. Download a release
 
-Grab the binary for your platform from the [GitHub Releases](https://github.com/kiddyuchina/sqlited/releases) page. No installation step is required �?it is a single self-contained executable.
+Grab the binary for your platform from the [GitHub Releases](https://github.com/kiddyuchina/sqlited/releases) page. No installation step is required -- it is a single self-contained executable.
 
 ### 2. Generate a config
 
@@ -158,10 +158,10 @@ objects and `meta.rows_read`; write statements populate `meta.rows_written`.
 .
 ├── cmd/sqlited/main.go          # entry point
 ├── internal/
-�?  ├── d1/                      # D1 JSON types
-�?  ├── config/                  # config loading & init
-�?  ├── sqlite/                  # SQLite connection & batch execution
-�?  └── server/                  # HTTP routing, auth, D1 handlers
+│   ├── d1/                      # D1 JSON types
+│   ├── config/                  # config loading & init
+│   ├── sqlite/                  # SQLite connection & batch execution
+│   └── server/                  # HTTP routing, auth, D1 handlers
 ├── go.mod
 ├── go.sum
 ├── Makefile
