@@ -118,9 +118,9 @@ Content-Type: application/json
 
 There is also an unauthenticated `GET /health` liveness probe.
 
-### Request body (D1 batch format)
+### Request body
 
-A JSON array of statement objects. The whole array executes atomically:
+A JSON array of statement objects (batch) or a single statement object:
 
 ```json
 [
@@ -129,8 +129,14 @@ A JSON array of statement objects. The whole array executes atomically:
 ]
 ```
 
-If any statement fails, the transaction is rolled back and an error response is
-returned; otherwise it is committed.
+Alternatively, send a single object without wrapping in an array:
+
+```json
+{ "sql": "SELECT 1 AS n", "params": [] }
+```
+
+If any statement in a batch fails, the transaction is rolled back and an error
+response is returned; otherwise it is committed.
 
 ### Response body (D1 format)
 

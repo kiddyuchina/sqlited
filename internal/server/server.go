@@ -139,16 +139,25 @@ func (s *Server) handleQuery(w http.ResponseWriter, r *http.Request) {
 }
 
 // decodeStatements parses the request body, accepting a JSON array of statement
-// objects (the D1 batch form).
+// objects (the D1 batch form) or a single statement object.
 func decodeStatements(r *http.Request) ([]d1.QueryRequest, error) {
 	defer r.Body.Close()
-	dec := json.NewDecoder(r.Body)
+
+	var raw json.RawMessage
+	if err := json.NewDecoder(r.Body).Decode(&raw); err != nil {
+		return nil, errors.New("request body must be a JSON array or object")
+	}
 
 	var batch []d1.QueryRequest
-	if err := dec.Decode(&batch); err != nil {
-		return nil, errors.New("request body must be a JSON array of {sql, params} objects")
+	if err := json.Unmarshal(raw, &batch); err == nil {
+		return batch, nil
 	}
-	return batch, nil
+
+	var single d1.QueryRequest
+	if err := json.Unmarshal(raw, &single); err != nil {
+		return nil, errors.New("request body must be a JSON array of {sql, params} objects or a single {sql, params} object")
+	}
+	return []d1.QueryRequest{single}, nil
 }
 
 func writeJSON(w http.ResponseWriter, status int, payload any) {

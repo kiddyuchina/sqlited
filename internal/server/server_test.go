@@ -129,6 +129,28 @@ func TestHandleQuery(t *testing.T) {
 			t.Errorf("expected 400, got %d", rr.Code)
 		}
 	})
+
+	t.Run("single object", func(t *testing.T) {
+		payload := `{"sql":"SELECT 1 AS n","params":[]}`
+		req := httptest.NewRequest(http.MethodPost, "/accounts/local/d1/database/db1/query", bytes.NewReader([]byte(payload)))
+		req.Header.Set("Authorization", "Bearer token")
+		req.Header.Set("Content-Type", "application/json")
+		rr := httptest.NewRecorder()
+		srv.Routes().ServeHTTP(rr, req)
+		if rr.Code != http.StatusOK {
+			t.Fatalf("expected 200, got %d: %s", rr.Code, rr.Body.String())
+		}
+		var resp d1.Response
+		if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+			t.Fatalf("invalid response JSON: %v", err)
+		}
+		if !resp.Success || len(resp.Result) != 1 {
+			t.Fatalf("unexpected response: %v", resp)
+		}
+		if resp.Result[0].Results[0]["n"] != float64(1) {
+			t.Errorf("expected 1, got %v", resp.Result[0].Results[0]["n"])
+		}
+	})
 }
 
 func TestHandleHealth(t *testing.T) {
